@@ -1,0 +1,28 @@
+<a href="" class="theme-validation-toggle-details" {{action "toggleDetails"}} data-test-toggle-details>
+    <h4 class="theme-validation-rule-text">
+        {{{error.rule}}}
+    </h4>
+    <div class="theme-validation-rule-icon">
+        {{#if showDetails}}
+            {{inline-svg "arrow-down"}}
+        {{else}}
+            {{inline-svg "arrow-right"}}
+        {{/if}}
+    </div>
+</a>
+
+{{#if showDetails}}
+    <p class="theme-validation-details">
+        {{{error.details}}}
+    </p>
+    {{#if error.failures}}
+        <div class="theme-validation-list">
+            <h6>Affected files:</h6>
+            <ul>
+                {{#each error.failures as |failure|}}
+                    <li><code>{{failure.ref}}</code>{{#if failure.message}}: {{failure.message}}{{/if}}</li>
+                {{/each}}
+            </ul>
+        </div>
+    {{/if}}
+{{/if}}

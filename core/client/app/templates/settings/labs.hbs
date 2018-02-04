@@ -1,0 +1,180 @@
+<section class="gh-canvas">
+    <header class="gh-canvas-header">
+        <h2 class="gh-canvas-title" data-test-screen-title>Labs</h2>
+    </header>
+
+    <section class="view-container settings-debug">
+        <p class="gh-box gh-box-info">{{inline-svg "idea"}}This is a testing ground for experimental features which aren't quite ready for primetime. They may change, break or inexplicably disappear at any time.</p>
+
+        <div class="gh-setting-header">Migration options</div>
+        <div class="gh-setting">
+            <div class="gh-setting-content">
+                <div class="gh-setting-title">Import content</div>
+                <div class="gh-setting-desc">Import posts from another Ghost installation</div>
+            </div>
+            <div class="gh-setting-action">
+                <form id="settings-import" enctype="multipart/form-data">
+                    {{gh-file-upload
+                        id="importfile"
+                        classNames="flex"
+                        uploadButtonText=uploadButtonText
+                        onUpload=(action "onUpload")
+                        acceptEncoding=importMimeType
+                        data-test-file-input="import"}}
+                </form>
+            </div>
+        </div>
+
+        {{#if importErrors}}
+            <div class="gh-import-errors {{if importSuccessful "gh-import-errors-warning"}}" data-test-import-errors>
+                <div class="gh-import-errors-title">
+                    {{#if importSuccessful}}
+                        Import successful with warnings
+                    {{else}}
+                        Import failed
+                    {{/if}}
+                </div>
+
+                {{#each importErrors as |error|}}
+                    <div class="gh-import-error" data-test-import-error>
+                        <p class="gh-import-error-message" data-test-import-error-message>
+                            {{#if error.help}}{{error.help}}: {{/if}}{{error.message}}
+                        </p>
+
+                        {{#if error.context}}
+                            <div class="gh-import-error-entry" data-test-import-error-context>
+                                <pre>{{error.context}}</pre>
+                            </div>
+                        {{/if}}
+                    </div>
+                {{/each}}
+            </div>
+        {{/if}}
+
+        <div class="gh-setting">
+            <div class="gh-setting-content">
+                <div class="gh-setting-title">Export your content</div>
+                <div class="gh-setting-desc">Download all of your posts and settings in a single, glorious JSON file</div>
+            </div>
+            <div class="gh-setting-action">
+                <button type="button" class="gh-btn gh-btn-hover-blue" {{action "downloadFile" "db"}}><span>Export</span></button>
+            </div>
+        </div>
+        <div class="gh-setting">
+            <div class="gh-setting-content">
+                <div class="gh-setting-title">Delete all content</div>
+                <div class="gh-setting-desc">Permanently delete all posts and tags from the database, a hard reset</div>
+            </div>
+            <div class="gh-setting-action">
+                <button type="button" class="gh-btn gh-btn-hover-red js-delete" {{action "toggleDeleteAllModal"}}><span>Delete</span></button>
+            </div>
+        </div>
+
+        <div class="gh-setting-header">Testing tools</div>
+        <div class="gh-setting">
+            <div class="gh-setting-content">
+                <div class="gh-setting-title">Test email configuration</div>
+                <div class="gh-setting-desc">Send yourself a test email to make sure everything is working</div>
+            </div>
+            <div class="gh-setting-action">
+                {{gh-task-button "Send" successText="Sent" task=sendTestEmail class="gh-btn gh-btn-hover-blue gh-btn-icon"}}
+            </div>
+        </div>
+
+        <div class="gh-setting-header">Beta features</div>
+        <div class="gh-setting">
+            <div class="gh-setting-content">
+                <div class="gh-setting-title">Public API</div>
+                <div class="gh-setting-desc">For full instructions, read the <a href="https://help.ghost.org/hc/en-us/articles/115000301672-Public-API-Beta">developer guide</a></div>
+            </div>
+            <div class="gh-setting-action">
+                <div class="for-checkbox">{{gh-feature-flag "publicAPI"}}</div>
+            </div>
+        </div>
+        <div class="gh-setting">
+            <div class="gh-setting-content">
+                <div class="gh-setting-title">Night shift</div>
+                <div class="gh-setting-desc">Swap Ghost admin's colours to a dark background which is easy on the eyes</div>
+            </div>
+            <div class="gh-setting-action">
+                <div class="for-checkbox">{{gh-feature-flag "nightShift"}}</div>
+            </div>
+        </div>
+        <div class="gh-setting">
+            <div class="gh-setting-content">
+                <div class="gh-setting-title">Subscribers</div>
+                <div class="gh-setting-desc">Collect email addresses from your readers, more info in <a href="https://help.ghost.org/hc/en-us/articles/224089787-Subscribers-Beta">the docs</a></div>
+            </div>
+            <div class="gh-setting-action">
+                <div class="for-checkbox">{{gh-feature-flag "subscribers"}}</div>
+            </div>
+        </div>
+        <div class="gh-setting">
+            {{#gh-uploader
+                extensions=jsonExtension
+                uploadUrl="/redirects/json/"
+                paramName="redirects"
+                onUploadSuccess=(perform redirectUploadResult true)
+                onUploadFailure=(perform redirectUploadResult false)
+                as |uploader|
+            }}
+            <div class="gh-setting-content">
+                <div class="gh-setting-title">Redirects</div>
+                <div class="gh-setting-desc">Configure redirects for old or moved content, more info in <a href="https://docs.ghost.org/v1/docs/redirects">the docs</a></div>
+                {{#each uploader.errors as |error|}}
+                    <div class="gh-setting-error" data-test-error="redirects">{{error.message}}</div>
+                {{/each}}
+            </div>
+            <div class="gh-setting-action" style="display: flex; flex-direction: column">
+                {{#if uploader.isUploading}}
+                    {{uploader.progressBar}}
+                {{else}}
+                    <button
+                        type="button"
+                        class="gh-btn gh-btn-icon {{if redirectSuccess "gh-btn-green"}} {{if redirectFailure "gh-btn-red"}}"
+                        onclick={{action "triggerFileDialog"}}
+                        data-test-button="upload-redirects"
+                    >
+                        <span>
+                            {{#if redirectSuccess}}
+                                {{inline-svg "check-circle"}} Uploaded
+                            {{else if redirectFailure}}
+                                {{inline-svg "retry"}} Upload Failed
+                            {{else}}
+                                Upload redirects JSON
+                            {{/if}}
+                        </span>
+                    </button>
+                    <span><a href="#" {{action "downloadFile" "redirects/json"}} data-test-link="download-redirects">Download current redirects</a></span>
+                {{/if}}
+
+                <div style="display:none">
+                    {{gh-file-input multiple=false action=uploader.setFiles accept=jsonMimeType data-test-file-input="redirects"}}
+                </div>
+            </div>
+            {{/gh-uploader}}
+        </div>
+
+        {{#if config.enableDeveloperExperiments}}
+            <div class="gh-setting-header">⚠️ Developer-only Feature Testing ⚠️</div>
+            <div class="gh-setting">
+                <div class="gh-setting-content">
+                    <div class="gh-setting-title">Koenig Editor</div>
+                    <div class="gh-setting-desc">
+                        Highly experimental (i.e. broken) editor. For developer use only.<br>
+                        <strong>Warning:</strong> Stories created or edited with Koenig will no longer be compatible with the old markdown editor.</div>
+                </div>
+                <div class="gh-setting-action">
+                    <div class="for-checkbox">{{gh-feature-flag "koenigEditor"}}</div>
+                </div>
+            </div>
+        {{/if}}
+
+    </section>
+</section>
+
+{{#if showDeleteAllModal}}
+    {{gh-fullscreen-modal "delete-all"
+                          close=(action "toggleDeleteAllModal")
+                          modifier="action wide"}}
+{{/if}}

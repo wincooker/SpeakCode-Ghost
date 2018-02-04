@@ -1,0 +1,339 @@
+/* Stop: Normalize.
+/* ---------------------------------------------------------- */
+@import "../../bower_components/normalize.css/normalize.css";
+
+
+/* Patterns: Groups of Styles
+/* ---------------------------------------------------------- */
+@import "patterns/global.css";
+@import "patterns/_shame.css";
+@import "patterns/icons.css";
+@import "patterns/forms.css";
+@import "patterns/buttons.css";
+@import "patterns/labels.css";
+@import "patterns/tables.css";
+@import "patterns/navlist.css";
+@import "patterns/boxes.css";
+@import "patterns/throbber.css";
+
+
+/* Components: Groups of Patterns
+/* ---------------------------------------------------------- */
+@import "components/loading-indicator.css";
+@import "components/modals.css";
+@import "components/notifications.css";
+@import "components/uploader.css";
+@import "components/splitbuttons.css";
+@import "components/dropdowns.css";
+@import "components/pagination.css";
+@import "components/badges.css";
+@import "components/settings-menu.css";
+@import "components/power-select.css";
+@import "components/power-calendar.css";
+@import "components/publishmenu.css";
+@import "components/popovers.css";
+@import "components/tour.css";
+@import "components/unsplash.css";
+
+
+/* Layouts: Groups of Components
+/* ---------------------------------------------------------- */
+@import "layouts/main.css";
+@import "layouts/flow.css";
+@import "layouts/auth.css";
+@import "layouts/content.css";
+@import "layouts/editor.css";
+@import "layouts/settings.css";
+@import "layouts/users.css";
+@import "layouts/user.css";
+@import "layouts/about.css";
+@import "layouts/tags.css";
+@import "layouts/error.css";
+@import "layouts/apps.css";
+@import "layouts/packages.css";
+@import "layouts/subscribers.css";
+
+
+/* Addons: gh-koenig
+/* ---------------------------------------------------------- */
+@import "addons/gh-koenig/gh-koenig.css";
+
+
+:root {
+    --darkgrey: #e5eff5;
+    --midgrey: #738a94;
+    --lightgrey: #333F44;
+}
+
+body {
+    color: #e5eff5;
+}
+
+pre {
+    border: color(var(--lightgrey) l(+5%));
+    background: var(--lightgrey);
+}
+
+hr {
+    border-color: color(var(--lightgrey) l(+5%));
+}
+
+input,
+.gh-input,
+.gh-select,
+.gh-select select {
+    color: var(--darkgrey);
+    border-color: color(var(--lightgrey));
+    background: color(var(--lightgrey));
+}
+
+.gh-nav,
+.settings-menu-container {
+    background: #212A2E;
+}
+
+@media (max-width: 800px) {
+    .gh-mobile-nav-bar {
+        background: #212A2E;
+    }
+}
+
+.gh-menu-toggle {
+    border-color: #212A2E;
+}
+
+.gh-nav-search .ember-power-select-trigger {
+    border-color: color(var(--lightgrey));
+    background: color(var(--lightgrey));
+}
+
+.ember-power-select-multiple-trigger {
+    border-color: color(var(--lightgrey));
+    background: color(var(--lightgrey));
+}
+
+.ember-power-select-dropdown {
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+}
+
+.ember-power-select-dropdown,
+.ember-power-select-options:not([role="group"]),
+.ember-power-select-dropdown.ember-basic-dropdown-content--in-place {
+    border-color: color(var(--lightgrey));
+    background: color(var(--lightgrey));
+}
+
+.ember-basic-dropdown--opened > .ember-power-select-trigger,
+.ember-power-select-trigger[aria-expanded="true"],
+.ember-power-select-search input {
+    border-color: color(var(--lightgrey));
+}
+
+.ember-power-calendar-weekdays,
+.ember-power-calendar-day--selected,
+.ember-power-calendar-day--selected:not([disabled]):hover {
+    color: #e5eff5;
+}
+
+.gh-nav-list svg {
+    fill: var(--darkgrey);
+}
+
+.gh-nav-list svg g {
+    stroke: var(--darkgrey);
+}
+
+.gh-main,
+.gh-unsplash-window {
+    background: #263238;
+}
+
+.gh-btn {
+    border: color(var(--darkgrey) l(-27%) blackness(+15%)) 1px solid ;
+    color: color(var(--darkgrey) l(-27%) blackness(+15%));
+    text-shadow: none;
+}
+.gh-btn-blue,
+.gh-btn-green,
+.gh-btn-red {
+    color: #fff;
+    border: 0;
+}
+
+.gh-btn-link {
+    border: none;
+}
+
+.settings-menu-delete-button {
+    color: var(--red);
+}
+
+.gh-publishmenu-trigger {
+    color: var(--blue);
+    border: none;
+}
+
+.gh-publishmenu-trigger svg path {
+    stroke-width: 2px;
+}
+
+.dropdown-menu > li > a,
+.dropdown-menu > li > button {
+    color: color(var(--lightgrey) lightness(+20%));
+}
+
+.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus, .dropdown-menu > li > button:hover, .dropdown-menu > li > button:focus {
+    color: var(--lightgrey);
+}
+
+.gh-cardmenu {
+    background: var(--lightgrey);
+}
+
+.editor-toolbar a.active, .editor-toolbar a:hover {
+    background-color: rgba(0,0,0,0.3);
+}
+
+.gh-badge-black,
+.gh-badge.owner {
+    color: var(--lightgrey);
+}
+
+.nav-list {
+    border-color: var(--lightgrey);
+    background: var(--lightgrey);
+}
+
+.gh-select select {
+    color: var(--darkgrey);
+    background: var(--lightgrey);
+}
+
+.gh-date-time-picker-date,
+.gh-date-time-picker-time {
+    background: var(--lightgrey);
+}
+
+.gh-date-time-picker input {
+    color: var(--darkgrey);
+}
+
+.gh-publishmenu-dropdown {
+    background: #212A2E;
+}
+
+.gh-image-uploader {
+    background: var(--lightgrey);
+}
+
+.gh-image-uploader .description {
+    color: var(--midgrey);
+}
+
+.gh-main > section.gh-editor-fullscreen {
+    background: color(#212A2E l(+2%));
+}
+
+.dropdown-menu {
+    background: var(--lightgrey);
+}
+
+.dropdown-menu > li > a, .dropdown-menu > li > button {
+    color: var(--darkgrey);
+}
+
+.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus, .dropdown-menu > li > button:hover, .dropdown-menu > li > button:focus {
+    color: #fff;
+}
+
+.dropdown-menu .divider {
+    opacity: 0.1;
+}
+
+.ember-power-select-group .ember-power-select-option .highlight {
+    background: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background: #212A2E;
+}
+
+.seo-preview-title {
+    color: color(#1e0fbe l(+25%));
+}
+
+.seo-preview-description {
+    color: var(--midgrey);
+}
+
+.tour-dismiss {
+    border: none;
+    background: linear-gradient( rgb(50, 50, 50), rgb(23, 23, 23) );
+}
+
+.tour-dismiss span {
+    background: linear-gradient( rgb(69, 69, 69), rgb(42, 44, 45) 60%, rgb(42, 44, 45) 90%, rgb(49, 52, 53) );
+}
+
+.throbber:before {
+    background: rgba(0,0,0,0.2);
+}
+
+.gh-editor-header-small {
+    background: #263238;
+}
+
+.gh-editor .CodeMirror-cursor {
+    border-color: #fff;
+}
+
+.gh-logo,
+.gh-unsplash-logo {
+    filter: invert(100%) brightness(150%);
+}
+
+.gh-canvas-title span path {
+    fill: #e5eff5;
+}
+
+.gh-loading-spinner {
+    border-color: rgba(255,255,255,0.1);
+}
+
+.gh-loading-spinner:before {
+    background: #fff;
+}
+
+.user-cover-edit {
+    color: #fff;
+}
+
+.gh-unsplash-search:focus {
+    background-color: color(var(--lightgrey));
+}
+
+.gh-unsplash-zoom {
+    background: rgba(0,0,0,0.8);
+}
+
+.gh-contributors a:before {
+    color: var(--lightgrey);
+}
+
+.settings-menu-content .for-radio .input-toggle-component,
+.settings-menu-content .for-checkbox .input-toggle-component {
+    background: var(--lightgrey);
+}
+
+.gh-box {
+    background: var(--lightgrey);
+    color: var(--darkgrey);
+}
+
+.CodeMirror .cm-spell-error:not(.cm-url):not(.cm-comment):not(.cm-tag):not(.cm-word) {
+    background: rgba(255, 0, 0, .30);
+}
+
+.CodeMirror .CodeMirror-code .cm-string {
+    color: color(#183691 l(+25%));
+}

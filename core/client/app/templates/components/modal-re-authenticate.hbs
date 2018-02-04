@@ -1,0 +1,20 @@
+<header class="modal-header">
+    <h1>Please re-authenticate</h1>
+</header>
+<a class="close" href="" title="Close" {{action "closeModal"}}>{{inline-svg "close"}}<span class="hidden">Close</span></a>
+
+<div class="modal-body {{if authenticationError 'error'}}">
+
+    <form id="login" class="login-form" method="post" novalidate="novalidate" {{action "confirm" on="submit"}}>
+        {{#gh-validation-status-container class="password-wrap" errors=errors property="password" hasValidated=hasValidated}}
+            {{gh-input password class="password" type="password" placeholder="Password" name="password" update=(action (mut password))}}
+        {{/gh-validation-status-container}}
+        <div>
+            {{gh-task-button "Log in" task=reauthenticate class="gh-btn gh-btn-blue gh-btn-icon" type="submit"}}
+        </div>
+    </form>
+
+   {{#if authenticationError}}
+     <p class="response">{{authenticationError}}</p>
+   {{/if}}
+</div>

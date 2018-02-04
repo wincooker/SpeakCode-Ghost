@@ -1,0 +1,90 @@
+<section class="gh-canvas">
+    <header class="gh-canvas-header">
+        <h2 class="gh-canvas-title" data-test-screen-title>Design</h2>
+        <section class="view-actions">
+            {{gh-task-button task=save class="gh-btn gh-btn-blue gh-btn-icon" data-test-save-button=true}}
+        </section>
+    </header>
+
+    {{#if showLeaveSettingsModal}}
+        {{gh-fullscreen-modal "leave-settings"
+            confirm=(action "leaveSettings")
+            close=(action "toggleLeaveSettingsModal")
+            modifier="action wide"}}
+    {{/if}}
+
+    <section class="view-container">
+        <div class="gh-setting-header">Navigation</div>
+        <div class="gh-blognav-container">
+            <form id="settings-navigation" class="gh-blognav" novalidate="novalidate">
+                {{#sortable-objects sortableObjectList=settings.navigation useSwap=false}}
+                    {{#each settings.navigation as |navItem|}}
+                        {{#draggable-object content=navItem dragHandle=".gh-blognav-grab" isSortable=true}}
+                            {{gh-navitem navItem=navItem baseUrl=blogUrl addItem=(action "addNavItem") deleteItem=(action "deleteNavItem") updateUrl=(action "updateUrl") updateLabel=(action "updateLabel")}}
+                        {{/draggable-object}}
+                    {{/each}}
+                {{/sortable-objects}}
+                {{gh-navitem navItem=newNavItem baseUrl=blogUrl addItem=(action "addNavItem") updateUrl=(action "updateUrl")}}
+            </form>
+        </div>
+
+        <div class="gh-setting-header">Themes</div>
+        <div class="gh-themes-container">
+            {{gh-theme-table
+                themes=themes
+                activateTheme=(action "activateTheme")
+                downloadTheme=(action "downloadTheme")
+                deleteTheme=(action "deleteTheme")}}
+
+            {{#link-to "settings.design.uploadtheme" class="gh-btn gh-btn-green gh-themes-uploadbtn" data-test-upload-theme-button=true}}
+                <span>Upload a theme</span>
+            {{/link-to}}
+
+
+            {{#if showDeleteThemeModal}}
+                {{gh-fullscreen-modal "delete-theme"
+                    model=(hash
+                        theme=themeToDelete
+                        download=(action "downloadTheme" themeToDelete)
+                    )
+                    close=(action "hideDeleteThemeModal")
+                    confirm=(action "deleteTheme")
+                    modifier="action wide"}}
+            {{/if}}
+
+            {{#if showThemeWarningsModal}}
+                {{gh-fullscreen-modal "theme-warnings"
+                    model=(hash
+                        title="Activation successful"
+                        warnings=themeWarnings
+                        errors=themeErrors
+                        message=message
+                        canActivate=true
+                    )
+                    close=(action "hideThemeWarningsModal")
+                    modifier="action wide"}}
+            {{/if}}
+
+            {{#if showThemeErrorsModal}}
+                {{gh-fullscreen-modal "theme-warnings"
+                    model=(hash
+                        title="Activation failed"
+                        errors=themeErrors
+                        fatalErrors=themeFatalErrors
+                        canActivate=false
+                    )
+                    close=(action "hideThemeWarningsModal")
+                    modifier="action wide"}}
+            {{/if}}
+        </div>
+
+    </section>
+</section>
+
+{{outlet}}
+
+{{gh-tour-item "upload-a-theme"
+    target=".gh-themes-uploadbtn"
+    throbberAttachment="top middle"
+    popoverTriangleClass="bottom"
+}}

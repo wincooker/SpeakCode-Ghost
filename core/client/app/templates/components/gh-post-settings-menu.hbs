@@ -1,0 +1,427 @@
+<div class="settings-menu-container">
+    <div id="entry-controls">
+        <div class="{{if isViewingSubview 'settings-menu-pane-out-left' 'settings-menu-pane-in'}} settings-menu settings-menu-pane">
+            <div class="settings-menu-header">
+                <h4>Post Settings</h4>
+                <button class="close settings-menu-header-action" {{action "closeMenus" target=ui}} data-test-close-settings-menu>
+                    {{inline-svg "close"}}<span class="hidden">Close</span>
+                </button>
+            </div>
+            <div class="settings-menu-content">
+                {{gh-image-uploader-with-preview
+                    image=post.featureImage
+                    text="Upload post image"
+                    allowUnsplash=true
+                    update=(action "setCoverImage")
+                    remove=(action "clearCoverImage")
+                }}
+                <form>
+                <div class="form-group">
+                    <label for="url">Post URL</label>
+                    {{!-- new posts don't have a preview link --}}
+                    {{#unless post.isNew}}
+                        {{#if post.isPublished}}
+                        <a class="post-view-link" target="_blank" href="{{post.absoluteUrl}}">
+                            View post {{inline-svg "external"}}
+                        </a>
+                        {{else}}
+                        <a class="post-view-link" target="_blank" href="{{post.previewUrl}}">
+                            Preview {{inline-svg "external"}}
+                        </a>
+                        {{/if}}
+                    {{/unless}}
+
+                    <div class="gh-input-icon gh-icon-link">
+                        {{inline-svg "link"}}
+                        {{gh-input slugValue
+                            class="post-setting-slug"
+                            id="url"
+                            name="post-setting-slug"
+                            focusOut=(action "updateSlug" slugValue)
+                            stopEnterKeyDownPropagation="true"
+                            update=(action (mut slugValue))}}
+                    </div>
+                    {{gh-url-preview slug=slugValue tagName="p" classNames="description"}}
+                </div>
+
+                <div class="form-group">
+                    {{#if (or post.isDraft post.isPublished post.pastScheduledTime)}}
+                        <label>Publish Date</label>
+                    {{else}}
+                        <label>Scheduled Date</label>
+                        <p>Use the publish menu to re-schedule</p>
+                    {{/if}}
+                    {{gh-date-time-picker
+                        date=post.publishedAtBlogDate
+                        time=post.publishedAtBlogTime
+                        setDate=(action "setPublishedAtBlogDate")
+                        setTime=(action "setPublishedAtBlogTime")
+                        errors=post.errors
+                        dateErrorProperty="publishedAtBlogDate"
+                        timeErrorProperty="publishedAtBlogTime"
+                        maxDate='now'
+                        disabled=post.isScheduled
+                        static=true
+                    }}
+                </div>
+
+                <div class="form-group">
+                    <label for="tag-input">Tags</label>
+                    {{gh-psm-tags-input post=post triggerId="tag-input"}}
+                </div>
+
+                {{#gh-form-group errors=post.errors hasValidated=post.hasValidated property="customExcerpt"}}
+                    <label for="custom-excerpt">Excerpt</label>
+                    {{gh-textarea customExcerptScratch
+                        class="post-setting-custom-excerpt"
+                        id="custom-excerpt"
+                        name="post-setting-custom-excerpt"
+                        focusOut=(action "setCustomExcerpt" customExcerptScratch)
+                        stopEnterKeyDownPropagation="true"
+                        update=(action (mut customExcerptScratch))
+                        data-test-field="custom-excerpt"}}
+                    {{gh-error-message errors=post.errors property="customExcerpt" data-test-error="custom-excerpt"}}
+                {{/gh-form-group}}
+
+                {{#unless session.user.isAuthor}}
+                <div class="form-group for-select">
+                    <label for="author-list">Author</label>
+                    <span class="gh-input-icon gh-icon-user">
+                        {{inline-svg "user-circle"}}
+                        <span class="gh-select" tabindex="0">
+                        {{one-way-select
+                            selectedAuthor
+                            id="author-list"
+                            name="post-setting-author"
+                            options=authors
+                            optionValuePath="id"
+                            optionLabelPath="name"
+                            update=(action "changeAuthor")
+                        }}
+                        {{inline-svg "arrow-down-small"}}
+                        </span>
+                    </span>
+                </div>
+                {{/unless}}
+
+                <ul class="nav-list nav-list-block">
+                    <li class="nav-list-item" {{action "showSubview" "meta-data"}} data-test-button="meta-data">
+                        <button type="button">
+                            <b>Meta Data</b>
+                            <span>Extra content for search engines</span>
+                        </button>
+                        {{inline-svg "arrow-right"}}
+                    </li>
+                    <li class="nav-list-item" {{action "showSubview" "twitter-data"}} data-test-button="twitter-data">
+                        <button type="button">
+                            <b>Twitter Card</b>
+                            <span>Customise structured data for Twitter</span>
+                        </button>
+                        {{inline-svg "arrow-right"}}
+                    </li>
+                    <li class="nav-list-item" {{action "showSubview" "facebook-data"}} data-test-button="facebook-data">
+                        <button type="button">
+                            <b>Facebook Card</b>
+                            <span>Customise Open Graph data</span>
+                        </button>
+                        {{inline-svg "arrow-right"}}
+                    </li>
+                    <li class="nav-list-item" {{action "showSubview" "codeinjection"}} data-test-button="codeinjection">
+                        <button type="button">
+                            <b>Code Injection</b>
+                            <span>Add styles/scripts to the header &amp; footer</span>
+                        </button>
+                        {{inline-svg "arrow-right"}}
+                    </li>
+                </ul>
+
+                <div class="form-group for-checkbox">
+                    <label class="checkbox" for="static-page" {{action "togglePage" bubbles="false"}}>
+                        {{one-way-checkbox post.page
+                            name="static-page"
+                            id="static-page"
+                            class="gh-input post-setting-static-page"
+                            update=(action (mut post.page))
+                            data-test-checkbox="static-page"
+                        }}
+                        <span class="input-toggle-component"></span>
+                        <p>Turn this post into a page</p>
+                    </label>
+
+                    <label class="checkbox" for="featured" {{action "toggleFeatured" bubbles="false"}}>
+                        {{one-way-checkbox post.featured
+                            name="featured"
+                            id="featured"
+                            class="gh-input post-setting-featured"
+                            update=(action (mut post.featured))
+                            data-test-checkbox="featured"
+                        }}
+                        <span class="input-toggle-component"></span>
+                        <p>Feature this post</p>
+                    </label>
+                </div>
+
+                {{gh-psm-template-select
+                    post=post
+                    onTemplateSelect=(action (mut post.customTemplate))}}
+
+                {{#unless post.isNew}}
+                    <button type="button" class="gh-btn gh-btn-link gh-btn-icon settings-menu-delete-button" {{action "deletePost"}}><span>{{inline-svg "trash"}} Delete Post</span></button>
+                {{/unless}}
+
+                </form>
+            </div>{{! .settings-menu-content }}
+        </div>{{! .post-settings-menu }}
+
+        <div class="{{if isViewingSubview 'settings-menu-pane-in' 'settings-menu-pane-out-right'}} settings-menu settings-menu-pane">
+            <div class="active">
+                {{#if isViewingSubview}}
+                    {{#if (eq subview "meta-data")}}
+                        <div class="settings-menu-header subview">
+                            <button {{action "closeSubview"}} class="back settings-menu-header-action" data-test-button="close-psm-subview">{{inline-svg "arrow-left"}}<span class="hidden">Back</span></button>
+                            <h4>Meta Data</h4>
+                            <div style="width:23px;"></div>
+                        </div>
+
+                        <div class="settings-menu-content">
+                            <form {{action "discardEnter" on="submit"}}>
+                                {{#gh-form-group errors=post.errors hasValidated=post.hasValidated property="metaTitle"}}
+                                    <label for="meta-title">Meta Title</label>
+                                    {{gh-input metaTitleScratch
+                                        class="post-setting-meta-title"
+                                        id="meta-title"
+                                        name="post-setting-meta-title"
+                                        focusOut=(action "setMetaTitle" metaTitleScratch)
+                                        stopEnterKeyDownPropagation="true"
+                                        update=(action (mut metaTitleScratch))
+                                        data-test-field="meta-title"}}
+                                    <p>Recommended: <b>70</b> characters. You’ve used {{gh-count-down-characters metaTitleScratch 70}}</p>
+                                    {{gh-error-message errors=post.errors property="meta-title"}}
+                                {{/gh-form-group}}
+
+                                {{#gh-form-group errors=post.errors hasValidated=post.hasValidated property="metaDescription"}}
+                                    <label for="meta-description">Meta Description</label>
+                                    {{gh-textarea metaDescriptionScratch
+                                        class="post-setting-meta-description"
+                                        id="meta-description"
+                                        name="post-setting-meta-description"
+                                        focusOut=(action "setMetaDescription" metaDescriptionScratch)
+                                        stopEnterKeyDownPropagation="true"
+                                        update=(action (mut metaDescriptionScratch))
+                                        data-test-field="meta-description"}}
+                                    <p>Recommended: <b>156</b> characters. You’ve used {{gh-count-down-characters metaDescriptionScratch 156}}</p>
+                                    {{gh-error-message errors=post.errors property="meta-description"}}
+                                {{/gh-form-group}}
+
+                                <div class="form-group">
+                                    <label>Search Engine Result Preview</label>
+                                    <div class="seo-preview">
+                                        <div class="seo-preview-title">{{truncate seoTitle 70}}</div>
+                                        <div class="seo-preview-link">{{truncate seoURL 70}}</div>
+                                        <div class="seo-preview-description">{{truncate seoDescription 300}}</div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    {{/if}}
+
+                    {{#if (eq subview "twitter-data")}}
+                        <div class="settings-menu-header subview">
+                            <button {{action "closeSubview"}} class="back settings-menu-header-action" data-test-button="close-psm-subview">{{inline-svg "arrow-left"}}<span class="hidden">Back</span></button>
+                            <h4>Twitter Card</h4>
+                            <div style="width:23px;"></div>
+                        </div>
+
+                        <div class="settings-menu-content">
+
+                            <form {{action "discardEnter" on="submit"}}>
+                                {{gh-image-uploader-with-preview
+                                    image=post.twitterImage
+                                    text="Add Twitter image"
+                                    allowUnsplash=true
+                                    update=(action "setTwitterImage")
+                                    remove=(action "clearTwitterImage")
+                                }}
+                                {{#gh-form-group errors=post.errors hasValidated=post.hasValidated property="twitterTitle"}}
+                                    <label for="twitter-title">Twitter Title</label>
+                                    {{gh-input twitterTitleScratch
+                                        class="post-setting-twitter-title"
+                                        id="twitter-title"
+                                        name="post-setting-twitter-title"
+                                        placeholder=(truncate twitterTitle 40)
+                                        focusOut=(action "setTwitterTitle" twitterTitleScratch)
+                                        stopEnterKeyDownPropagation="true"
+                                        update=(action (mut twitterTitleScratch))
+                                        data-test-field="twitter-title"}}
+                                    {{gh-error-message errors=post.errors property="twitterTitle" data-test-error="twitter-title"}}
+                                {{/gh-form-group}}
+
+                                {{#gh-form-group errors=post.errors hasValidated=post.hasValidated property="twitterDescription"}}
+                                    <label for="twitter-description">Twitter Description</label>
+                                    {{gh-textarea twitterDescriptionScratch
+                                        class="post-setting-twitter-description"
+                                        id="twitter-description"
+                                        name="post-setting-twitter-description"
+                                        placeholder=(truncate twitterDescription 155)
+                                        focusOut=(action "setTwitterDescription" twitterDescriptionScratch)
+                                        stopEnterKeyDownPropagation="true"
+                                        update=(action (mut twitterDescriptionScratch))
+                                        data-test-field="twitter-description"}}
+                                    {{gh-error-message errors=post.errors property="twitterDescription" data-test-error="twitter-description"}}
+                                {{/gh-form-group}}
+
+                                <div class="form-group">
+                                    <label>Preview</label>
+                                    <div class="gh-twitter-preview">
+                                        {{#if twitterImage}}
+                                        <div class="gh-twitter-preview-image" style={{twitterImageStyle}}></div>
+                                        {{/if}}
+                                        <div class="gh-twitter-preview-content">
+                                            <div class="gh-twitter-preview-title">{{twitterTitle}}</div>
+                                            <div class="gh-twitter-preview-description">{{truncate twitterDescription 155}}</div>
+                                            <div class="gh-twitter-preview-footer">
+                                                <div class="gh-twitter-preview-footer-left">
+                                                    {{config.blogDomain}}
+                                                </div>
+                                                <div class="gh-twitter-preview-footer-right">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                    {{/if}}
+
+                    {{#if (eq subview "facebook-data")}}
+                        <div class="settings-menu-header subview">
+                            <button {{action "closeSubview"}} class="back settings-menu-header-action" data-test-button="close-psm-subview">{{inline-svg "arrow-left"}}<span class="hidden">Back</span></button>
+                            <h4>Facebook Card</h4>
+                            <div style="width:23px;"></div>
+                        </div>
+
+                        <div class="settings-menu-content">
+                            <form {{action "discardEnter" on="submit"}}>
+                                {{gh-image-uploader-with-preview
+                                    image=post.ogImage
+                                    text="Add Facebook image"
+                                    allowUnsplash=true
+                                    update=(action "setOgImage")
+                                    remove=(action "clearOgImage")
+                                }}
+                                {{#gh-form-group errors=post.errors hasValidated=post.hasValidated property="ogTitle"}}
+                                    <label for="og-title">Facebook Title</label>
+                                    {{gh-input ogTitleScratch
+                                        class="post-setting-og-title"
+                                        id="og-title"
+                                        name="post-setting-og-title"
+                                        placeholder=(truncate facebookTitle 40)
+                                        focusOut=(action "setOgTitle" ogTitleScratch)
+                                        stopEnterKeyDownPropagation="true"
+                                        update=(action (mut ogTitleScratch))
+                                        data-test-field="og-title"}}
+                                    {{gh-error-message errors=post.errors property="ogTitle" data-test-error="og-title"}}
+                                {{/gh-form-group}}
+
+                                {{#gh-form-group errors=post.errors hasValidated=post.hasValidated property="ogDescription"}}
+                                    <label for="og-description">Facebook Description</label>
+                                    {{gh-textarea ogDescriptionScratch
+                                        class="post-setting-og-description"
+                                        id="og-description"
+                                        name="post-setting-og-description"
+                                        placeholder=(truncate facebookDescription 160)
+                                        focusOut=(action "setOgDescription" ogDescriptionScratch)
+                                        stopEnterKeyDownPropagation="true"
+                                        update=(action (mut ogDescriptionScratch))
+                                        data-test-field="og-description"}}
+                                    {{gh-error-message errors=post.errors property="ogDescription" data-test-error="og-description"}}
+                                {{/gh-form-group}}
+
+                                <div class="form-group">
+                                    <label>Preview</label>
+                                    <div class="gh-og-preview">
+                                        {{#if facebookImage}}
+                                        <div class="gh-og-preview-image" style={{facebookImageStyle}}></div>
+                                        {{/if}}
+                                        <div class="gh-og-preview-content">
+                                            <div class="gh-og-preview-title">{{truncate facebookTitle 88}}</div>
+                                            <div class="gh-og-preview-description">{{truncate facebookDescription 300}}</div>
+                                            <div class="gh-og-preview-footer">
+                                                <div class="gh-og-preview-footer-left">
+                                                    {{config.blogDomain}} <span class="gh-og-preview-footer-left-divider">|</span> by <span class="gh-og-preview-footer-author">{{post.author.name}}</span>
+                                                </div>
+                                                <div class="gh-og-preview-footer-right">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                    {{/if}}
+
+                    {{#if (eq subview "codeinjection")}}
+                        <div class="settings-menu-header subview">
+                            <button {{action "closeSubview"}} class="back settings-menu-header-action" data-test-button="close-psm-subview">{{inline-svg "arrow-left"}}<span class="hidden">Back</span></button>
+                            <h4>Code Injection</h4>
+                            <div style="width:23px;"></div>
+                        </div>
+
+                        <div class="settings-menu-content settings-menu-content-codeinjection">
+                            <form {{action "discardEnter" on="submit"}}>
+                                {{#gh-form-group errors=post.errors hasValidated=post.hasValidated property="codeinjectionHead"}}
+                                    <label for="codeinjection-head">Post Header <code>\{{ghost_head}}</code></label>
+                                    {{gh-cm-editor codeinjectionHeadScratch
+                                        id="post-setting-codeinjection-head"
+                                        class="post-setting-codeinjection"
+                                        name="post-setting-codeinjection-head"
+                                        focusOut=(action "setHeaderInjection" codeinjectionHeadScratch)
+                                        stopEnterKeyDownPropagation="true"
+                                        update=(action (mut codeinjectionHeadScratch))
+                                        data-test-field="codeinjection-head"}}
+                                    {{gh-error-message errors=post.errors property="codeinjectionHead" data-test-error="codeinjection-head"}}
+                                {{/gh-form-group}}
+
+                                {{#gh-form-group errors=post.errors hasValidated=post.hasValidated property="codeinjectionFoot"}}
+                                    <label for="codeinjection-foot">Post Footer <code>\{{ghost_foot}}</code></label>
+                                    {{gh-cm-editor codeinjectionFootScratch
+                                        id="post-setting-codeinjection-foot"
+                                        class="post-setting-codeinjection"
+                                        name="post-setting-codeinjection-foot"
+                                        focusOut=(action "setFooterInjection" codeinjectionFootScratch)
+                                        stopEnterKeyDownPropagation="true"
+                                        update=(action (mut codeinjectionFootScratch))
+                                        data-test-field="codeinjection-foot"}}
+                                    {{gh-error-message errors=post.errors property="codeinjectionFoot" data-test-error="codeinjection-foot"}}
+                                {{/gh-form-group}}
+                            </form>
+                        </div>
+                    {{/if}}
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</div>
+
+{{!--
+    _showThrobbers is on a timer so that throbbers don't get positioned until
+    the slide-in animation has finished and it gets toggled when the meta
+    pane is shown
+--}}
+{{#if _showThrobbers}}
+    {{gh-tour-item "static-post"
+        target="label[for='static-page'] p"
+        throbberAttachment="middle middle"
+        throbberOffset="0px 33px"
+        popoverTriangleClass="bottom-right"
+    }}
+
+    {{gh-tour-item "featured-post"
+        target="label[for='featured'] p"
+        throbberAttachment="middle middle"
+        throbberOffset="0px -20px"
+        popoverTriangleClass="bottom-right"
+    }}
+{{/if}}

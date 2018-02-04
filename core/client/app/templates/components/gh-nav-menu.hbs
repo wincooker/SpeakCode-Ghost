@@ -1,0 +1,99 @@
+{{gh-menu-toggle desktopAction=(action "toggleAutoNav" target=ui) mobileAction=(action "closeMobileMenu" target=ui)}}
+{{#gh-basic-dropdown horizontalPosition="right" calculatePosition=userDropdownPosition as |dropdown|}}
+    {{#dropdown.trigger tagName="header" class="gh-nav-menu"}}
+        <div class="gh-nav-menu-icon" style={{iconStyle}}></div>
+        <div class="gh-nav-menu-details">
+            <div class="gh-nav-menu-details-blog">{{config.blogTitle}}</div>
+            <div class="gh-nav-menu-details-user">{{session.user.name}}</div>
+        </div>
+        {{inline-svg "arrow-down-small"}}
+    {{/dropdown.trigger}}
+    {{#dropdown.content class="gh-nav-menu-dropdown"}}
+        <ul class="dropdown-menu dropdown-triangle-top" role="menu" {{action dropdown.actions.close on="click" preventDefault=false}}>
+            <li role="presentation">{{#link-to "about" classNames="gh-nav-menu-about dropdown-item js-nav-item" role="menuitem" tabindex="-1"}}{{inline-svg "store"}} About Ghost{{/link-to}}</li>
+            <li class="divider"></li>
+            <li role="presentation">{{#link-to "team.user" session.user.slug classNames="dropdown-item user-menu-profile js-nav-item" role="menuitem" tabindex="-1"}}{{inline-svg "user-circle"}} Your Profile{{/link-to}}</li>
+            <li role="presentation"><a class="dropdown-item help-menu-support" role="menuitem" tabindex="-1" href="https://help.ghost.org/" target="_blank">{{inline-svg "ambulance"}} Support Center</a></li>
+            <li role="presentation"><a class="dropdown-item help-menu-tweet" role="menuitem" tabindex="-1" href="https://twitter.com/intent/tweet?text=%40TryGhost+Hi%21+Can+you+help+me+with+&related=TryGhost" target="_blank" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">{{inline-svg "twitter"}} Tweet @TryGhost!</a></li>
+            <li role="presentation"><a class="dropdown-item help-menu-how-to" role="menuitem" tabindex="-1" href="https://ghosthelp.zendesk.com/hc/en-us/categories/203268947-Ghost-Pro-" target="_blank">{{inline-svg "book-open"}} How to Use Ghost</a></li>
+            <li class="divider"></li>
+
+            {{#if showDropdownExtension}}
+                {{#each config.clientExtensions.dropdown.items as |menuItem| }}
+                    {{#if menuItem.divider}}
+                        <li class="divider"></li>
+                    {{else}}
+                        <li role="presentation">
+                          <a href="{{menuItem.href}}" target="_blank"
+                             class="dropdown-item js-nav-item {{menuItem.classes}}"
+                             role="menuitem" tabindex="-1">{{inline-svg menuItem.icon}}{{menuItem.text}}</a>
+                        </li>
+                    {{/if}}
+                {{/each}}
+
+            {{/if}}
+            <li role="presentation">{{#link-to "signout" classNames="dropdown-item user-menu-signout" role="menuitem" tabindex="-1"}}{{inline-svg "signout"}} Sign Out{{/link-to}}</li>
+        </ul>
+    {{/dropdown.content}}
+{{/gh-basic-dropdown}}
+<section class="gh-nav-body">
+    <section class="gh-nav-search">
+        {{gh-search-input class="gh-nav-search-input"}}
+    </section>
+    <ul class="gh-nav-list gh-nav-main">
+        <li>{{#link-to "editor.new" classNames="gh-nav-main-editor"}}{{inline-svg "pen"}}New story{{/link-to}}</li>
+        <li>
+            {{!-- clicking the Content link whilst on the content screen should reset the filter --}}
+            {{#if (eq router.currentRouteName "posts.index")}}
+                {{#link-to "posts" (query-params type=null author=null tag=null order=null) classNames="gh-nav-main-content active"}}{{inline-svg "content"}}Stories{{/link-to}}
+            {{else}}
+                {{#link-to "posts" classNames="gh-nav-main-content"}}{{inline-svg "content"}}Stories{{/link-to}}
+            {{/if}}
+        </li>
+        <li>{{#link-to "team" classNames="gh-nav-main-users"}}{{inline-svg "account-group"}}Team{{/link-to}}</li>
+        {{#if feature.subscribers}}
+            {{#if (gh-user-can-admin session.user)}}
+                <li>{{#link-to "subscribers" classNames="gh-nav-main-subscribers"}}{{inline-svg "email"}}Subscribers{{/link-to}}</li>
+            {{/if}}
+        {{/if}}
+    </ul>
+    {{#if (gh-user-can-admin session.user)}}
+        <ul class="gh-nav-list gh-nav-settings">
+            <li class="gh-nav-list-h">Settings</li>
+            <li>{{#link-to "settings.general" classNames="gh-nav-settings-general"}}{{inline-svg "settings"}}General{{/link-to}}</li>
+            <li>{{#link-to "settings.design" classNames="gh-nav-settings-navigation"}}{{inline-svg "compass"}}Design{{/link-to}}</li>
+            <li>{{#link-to "settings.tags" classNames="gh-nav-settings-tags"}}{{inline-svg "tag"}}Tags{{/link-to}}</li>
+            <li>{{#link-to "settings.code-injection" classNames="gh-nav-settings-code-injection"}}{{inline-svg "brackets"}}Code injection{{/link-to}}</li>
+            <li>{{#link-to "settings.apps" classNames="gh-nav-settings-apps"}}{{inline-svg "box"}}Apps{{/link-to}}</li>
+            <li>{{#link-to "settings.labs" classNames="gh-nav-settings-labs"}}{{inline-svg "wrench-double"}}Labs{{/link-to}}</li>
+        </ul>
+    {{/if}}
+
+    {{#if showMenuExtension}}
+        <ul class="gh-nav-list gh-nav-settings">
+            {{#if config.clientExtensions.menu.title}}<li class="gh-nav-list-h">{{config.clientExtensions.menu.title}}</li>{{/if}}
+            {{#each config.clientExtensions.menu.items as |menuItem| }}
+                <li>
+                    <a href="{{menuItem.href}}" target="_blank">{{inline-svg menuItem.icon}}{{menuItem.text}}</a>
+                </li>
+            {{/each}}
+        </ul>
+    {{/if}}
+
+    {{#if showScriptExtension}}
+        {{{config.clientExtensions.script.container}}}
+        <script src="{{config.clientExtensions.script.src}}"></script>
+    {{/if}}
+
+</section>
+<footer class="gh-nav-foot">
+    <a class="gh-nav-foot-sitelink" href="{{config.blogUrl}}/" target="_blank">View site {{inline-svg "external"}}</a>
+</footer>
+<div class="gh-autonav-toggle" {{action "openAutoNav" on="mouseEnter" target=ui}}></div>
+
+{{gh-tour-item "getting-started"
+    target=".gh-menu-toggle"
+    throbberAttachment="bottom middle"
+    throbberOffset="0 4px"
+    popoverTriangleClass="left-top"
+}}

@@ -1,0 +1,29 @@
+<header class="modal-header">
+    <h1>Are you sure you want to delete this user?</h1>
+</header>
+<a class="close" href="" title="Close" {{action "closeModal"}}>{{inline-svg "close"}}<span class="hidden">Close</span></a>
+
+<div class="modal-body">
+    <p><strong>WARNING:</strong> You are about to delete the user '<strong>{{user.name}}</strong>'. There is no way to recover this.</p>
+    {{#if user.count.posts}}
+        <ul>
+            <li>The user will not have access to this blog anymore</li>
+            <li><strong>{{pluralize user.count.posts 'post'}}</strong> created by this user will be deleted</li>
+            <li>All other user data will be deleted</li>
+        </ul>
+    {{else}}
+        <ul>
+            <li>User will not have access to this blog anymore</li>
+            <li>All user data will be deleted.</li>
+        </ul>
+    {{/if}}
+</div>
+
+<div class="modal-footer">
+    <button {{action "closeModal"}} class="gh-btn"><span>Cancel</span></button>
+    {{#if user.count.posts}}
+        {{gh-task-button "Delete user and their posts" successText="Deleted" task=deleteUser class="gh-btn gh-btn-red gh-btn-icon"}}
+    {{else}}
+        {{gh-task-button "Delete user" successText="Deleted" task=deleteUser class="gh-btn gh-btn-red gh-btn-icon"}}
+    {{/if}}
+</div>

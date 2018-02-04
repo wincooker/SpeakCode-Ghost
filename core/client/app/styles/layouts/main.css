@@ -1,0 +1,677 @@
+/* Global Layout
+/* ---------------------------------------------------------- */
+
+/*
+  Ember's app container. Use `position: fixed`, covering full window area so
+  that scrolling on mobile doesn't trigger elastic scroll
+
+  TODO: Once we have routable components it should be possible to remove this
+  by moving the gh-app component functionality into the application component
+  which would remove the extra div that this targets.
+*/
+body > .ember-view:not(.default-liquid-destination) {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+/* Main viewport, contains main content, and alerts */
+.gh-app {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    height: 100%;
+}
+
+/* Content viewport, contains everything else */
+.gh-viewport {
+    flex-grow: 1;
+    display: flex;
+    overflow: hidden;
+    max-height: 100%;
+}
+
+.gh-main {
+    position: relative;
+    flex-grow: 1;
+    display: flex;
+    background: #fff;
+    overflow-y: auto;
+    /* prevent horizontal scroll in IE11 */
+    overflow-x: hidden;
+}
+
+/*  Flexbox fix. https://github.com/TryGhost/Ghost/issues/5804#issuecomment-141416812 */
+.gh-main > section {
+    width: 1px;
+    position: relative; /* for the editor in safari */
+}
+
+
+/* Global Nav
+/* ---------------------------------------------------------- */
+
+.gh-nav {
+    position: relative;
+    z-index: 800;
+    flex: 0 0 280px;
+    display: flex;
+    flex-direction: column;
+    min-width: 0; /* TODO: This is a bullshit Firefox hack */
+    background: color(var(--lightgrey) l(+4%));
+    transform: translateX(0);
+}
+
+.gh-nav-menu {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    padding: 25px;
+    cursor: pointer;
+    outline: none;
+}
+
+.gh-nav-menu-dropdown.ember-basic-dropdown--transitioning-in {
+    animation: fade-in-scale 0.2s;
+    animation-fill-mode: forwards;
+}
+
+.gh-nav-menu-dropdown.ember-basic-dropdown--transitioning-out {
+    animation: fade-out 0.5s;
+    animation-fill-mode: forwards;
+}
+
+.gh-nav-menu svg {
+    margin-right: 8px;
+    width: 12px;
+    height: 12px;
+    transition: margin-top 0.2s ease;
+}
+
+.gh-nav-menu svg path {
+    stroke-width: 1px;
+    stroke: color(var(--darkgrey));
+}
+
+.gh-nav-menu-icon {
+    flex-shrink: 0;
+    margin-right: 10px;
+    width: 32px;
+    height: 32px;
+    background-color: transparent;
+    background-size: 32px;
+    border-radius: 4px;
+}
+
+.gh-nav-menu-details {
+    flex-grow: 1;
+    padding-right: 10px;
+    min-width: 0; /* TODO: This is a bullshit Firefox hack */
+}
+
+.gh-nav-menu-details-blog {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 1.4rem;
+    line-height: 1.3em;
+    font-weight: 600;
+}
+
+.gh-nav-menu-details-user {
+    overflow: hidden;
+    color: var(--midgrey);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 1.2rem;
+    line-height: 1.2em;
+}
+
+.gh-nav-body {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.gh-nav-search {
+    position: relative;
+    margin: 0 25px 15px;
+}
+
+.gh-nav-search .ember-power-select-trigger {
+    outline: 0;
+    background: #fff;
+}
+
+.gh-nav-search-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    padding: 0 8px 0 5px;
+}
+
+.gh-nav-search-button svg {
+    width: 13px;
+    height: 13px;
+    fill: var(--midgrey);
+    line-height: 13px;
+    transition: color 0.2s ease;
+    transform: rotate(90deg);
+    vertical-align: -1px;
+}
+
+.gh-nav-search-button:hover svg {
+    fill: var(--darkgrey);
+}
+
+.gh-nav-list {
+    margin: 0;
+    padding: 0 25px 0 0;
+    list-style: none;
+    font-size: 1.3rem;
+    line-height: 1.5em;
+}
+
+.gh-nav-list li {
+    margin: 0;
+}
+
+.gh-nav-list .gh-nav-list-h {
+    overflow: hidden;
+    margin-top: 15px;
+    padding: 10px 10px 10px 25px;
+    color: #808284;
+    text-transform: uppercase;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    letter-spacing: 0.05em;
+    font-size: 1.1rem;
+    line-height: 1.1em;
+}
+
+.gh-nav-list a {
+    display: flex;
+    align-items: center;
+    padding: 7px 10px 7px 25px;
+    border-radius: 0 4px 4px 0;
+    color: var(--darkgrey);
+    opacity: 0.9;
+    transition: none;
+}
+
+.gh-nav-list .active {
+    background: color(var(--blue) lightness(+10%));
+    color: #fff;
+    opacity: 1;
+}
+
+.gh-nav-list a:not(.active):hover {
+    background: color(var(--blue) alpha(-85%));
+    color: var(--darkgrey);
+    opacity: 1;
+}
+
+.gh-nav-list svg {
+    margin-right: 8px;
+    width: 15px;
+    height: 15px;
+    fill: rgba(0,0,0,0.6);
+    line-height: 1;
+}
+
+.gh-nav-list svg g {
+    stroke: rgba(0,0,0,0.6);
+}
+
+.gh-nav-list .active svg {
+    fill: #fff;
+}
+
+.gh-nav-list .active svg g {
+    stroke: #fff;
+}
+
+.gh-nav-list a:not(.active):hover svg {
+    fill: var(--darkgrey);
+}
+
+.gh-nav-list a:not(.active):hover svg g {
+    stroke: var(--darkgrey);
+}
+
+.gh-nav-foot-sitelink {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 46px;
+    border-top: color(var(--lightgrey) l(-1%)) 1px solid;
+    text-align: center;
+    font-size: 1.2rem;
+    line-height: 1em;
+    font-weight: 300;
+    color:  color(var(--midgrey) l(+5%));
+}
+
+@media (max-width: 500px) {
+    .gh-nav-foot-sitelink {
+        height: 56px;
+    }
+}
+
+.gh-nav-foot-sitelink svg {
+    width: 13px;
+    margin-left: 5px;
+    fill: color(var(--midgrey) l(+5%));
+}
+
+/* Mobile Nav Menu (Slides out)
+/* ---------------------------------------------------------- */
+
+.gh-mobilemenu-button {
+    display: none;
+}
+
+@media (max-width: 800px) {
+    .view-header {
+        padding-left: 0 !important;
+    }
+
+    .gh-mobilemenu-button {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        margin: 0;
+        padding: 24px;
+        font-size: 18px;
+        line-height: 18px;
+    }
+
+    .gh-mobilemenu-button .icon-gh {
+        margin: 0;
+        width: 20px;
+        height: 18px;
+    }
+
+    /* Hide the nav */
+    .gh-nav {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 205px;
+        height: 100%;
+        transition: transform 0.4s cubic-bezier(0.1, 0.7, 0.1, 1);
+        transform: translate3d(-205px, 0px, 0px);
+    }
+    .mobile-menu-expanded .gh-nav {
+        transform: translate3d(0,0,0);
+    }
+}
+
+@media (max-width: 500px) {
+    .gh-mobilemenu-button {
+        padding: 24px 15px 24px 16px;
+    }
+
+    .gh-nav {
+        width: 80vw;
+        transform: translate3d(-80vw, 0px, 0px);
+    }
+    .mobile-menu-expanded .gh-nav {
+        transform: translate3d(0,0,0);
+    }
+    .mobile-menu-expanded .content-cover {
+        width: 20vw;
+        cursor: pointer;
+        transform: translate3d(80vw, 0, 0);
+    }
+
+    .gh-nav-list {
+        font-size: 1.5rem;
+    }
+
+    .gh-nav-list-h {
+        font-size: 1.2rem;
+    }
+
+    .gh-nav-list svg {
+        margin-right: 8px;
+        width: 17px;
+        height: 17px;
+        text-align: center;
+        font-size: 17px;
+    }
+}
+
+
+/* Auto Nav - Opens and closes like OSX dock
+/* ---------------------------------------------------------- */
+
+.gh-menu-toggle {
+    display: block;
+    position: absolute;
+    top: 25px;
+    right: -8px;
+    height: 34px;
+    width: 25px;
+    border: color(var(--lightgrey) l(+4%)) 5px solid;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.gh-menu-toggle:hover {
+    cursor: pointer;
+}
+
+.gh-menu-toggle svg {
+    transition: all 0.2s ease;
+}
+
+.gh-menu-toggle:hover svg {
+    fill: var(--blue);
+}
+
+.gh-menu-toggle-content {
+    display: none;
+}
+
+@media (max-width: 800px) {
+    .gh-menu-toggle {
+        position: static;
+        height: auto;
+        width: auto;
+        border: none;
+        border-radius: 0;
+    }
+    .gh-menu-toggle-content {
+        display: block;
+    }
+}
+
+/* Autonav is tricky, because hit areas of translated elements aren't in sync
+   with the visible element we need to add the hover behaviour to a small,
+   non-moving element. The following code positions our hit area and transitions
+   it in-sync with it's container so it always sticks to the left of the viewport
+   then hides off-canvas when required as display:none breaks transitions. */
+
+.gh-autonav-toggle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: none;
+    width: 15px;
+    height: 100%;
+    transition: transform 0.20s;
+    transform: translate3d(0,0,0);
+}
+
+.gh-autonav .gh-autonav-toggle {
+    display: block;
+}
+
+.gh-nav.open .gh-autonav-toggle {
+    transition: transform 0.15s;
+    transform: translate3d(-240px,0,0);
+}
+
+@media (min-width: 801px) {
+    /* Hide the nav */
+    .gh-autonav .gh-nav {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        width: 250px;
+        height: 100%;
+        transition: transform 0.20s;
+        /* translate3d for GPU accelerated animation - http://bit.ly/1EY1Xhx */
+        transform: translate3d(-240px,0,0);
+    }
+
+    /* THE FUTURE: Super sexy background blur for Webkit - http://cl.ly/b1rG */
+    @supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
+        .gh-autonav .gh-nav {
+            background: rgba(246,246,246, 0.7);
+
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+        }
+    }
+
+    /* Bring it back on hover */
+    .gh-autonav .gh-nav.open {
+        transition: transform 0.15s;
+        transform: translate3d(0,0,0);
+    }
+
+    /* Move main content over for the closed-nav trigger bar */
+    .gh-autonav .gh-main {
+        margin-left: 10px;
+    }
+}
+
+
+/* Mobile Nav Bar (Sits at bottom of screen)
+/* ---------------------------------------------------------- */
+
+.gh-mobile-nav-bar { display: none; }
+
+@media (max-width: 800px) {
+
+    /* Make space for the mobile nav bar */
+    .gh-viewport {
+        padding-bottom: 55px;
+    }
+
+    .gh-mobile-nav-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: #fff;
+        border-top: var(--lightgrey) 1px solid;
+    }
+
+    .gh-mobile-nav-bar a,
+    .gh-mobile-nav-bar-more {
+        height: 55px;
+        padding: 10px 15px 5px 15px;
+        text-align: center;
+        cursor: pointer;
+        color: var(--darkgrey);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-around;
+        font-size: 1.2rem;
+    }
+
+    .gh-mobile-nav-bar a.active {
+        background: color(var(--blue) lightness(+10%));
+        color: #fff;
+    }
+
+    .gh-mobile-nav-bar a.active svg {
+        fill: #fff;
+    }
+
+    .gh-mobile-nav-bar a.active.gh-nav-main-users g,
+    .gh-mobile-nav-bar a.active.gh-nav-main-users path {
+        fill: transparent;
+        stroke: white;
+    }
+
+    .gh-mobile-nav-bar svg,
+    .gh-mobile-nav-bar svg g {
+        width: 15px;
+        fill: var(--darkgrey);
+    }
+
+    .gh-mobile-nav-bar svg g path {
+        stroke: var(--darkgrey);
+    }
+
+    /* non-authed pages shouldn't have the mobile bar */
+    .ghost-setup .gh-viewport,
+    .ghost-reset .gh-viewport,
+    .ghost-signup .gh-viewport,
+    .ghost-login .gh-viewport {
+        padding-bottom: 0;
+    }
+
+    .ghost-setup .gh-mobile-nav-bar,
+    .ghost-reset .gh-mobile-nav-bar,
+    .ghost-signup .gh-mobile-nav-bar,
+    .ghost-login .gh-mobile-nav-bar {
+        display: none;
+    }
+}
+
+
+/* Container for App View
+/* ---------------------------------------------------------- */
+
+.gh-view {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.gh-canvas {
+    flex-grow: 1;
+    padding: 24px 4vw 3vw 4vw;
+    margin: 0 auto;
+    max-width: 1200px;
+}
+
+.gh-canvas-header {
+    flex-shrink: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 0 2vw 0;
+}
+
+.gh-canvas-title {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 2.9rem;
+    line-height: 1.2em;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    /* match button height to avoid jump on navigation between screens*/
+    min-height: 35px;
+}
+
+@media (max-width: 500px) {
+    .gh-canvas-title {
+        display: block;
+    }
+    .gh-canvas-title svg {
+        margin: 0 5px;
+    }
+}
+
+.gh-canvas-title a {
+    color: var(--darkgrey);
+}
+
+.gh-canvas-title span {
+    display: inline-block;
+    height: 100%;
+    vertical-align: baseline;
+}
+
+.gh-canvas-title svg {
+    width: 0.6em;
+    height: 0.6em;
+    margin: 0 10px;
+}
+
+.view-header {
+    flex-shrink: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    height: 65px;
+    border-bottom: var(--lightgrey) 1px solid;
+}
+
+.view-title {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    text-overflow: ellipsis;
+    font-size: 2rem;
+    line-height: 1.2em;
+    font-weight: 400;
+}
+
+.view-title a {
+    color: inherit;
+}
+
+.view-title a:hover {
+    color: var(--blue);
+}
+
+.view-title svg {
+    margin: 0 10px;
+    height: 14px;
+}
+
+.view-title svg path {
+    fill: #818181;
+}
+
+.view-actions {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+}
+
+.view-actions .gh-btn {
+    margin-left: 8px;
+}
+
+.view-container,
+.view-content {
+    position: relative;
+    flex-grow: 1;
+    padding-bottom: 4vw;
+}
+
+.view-content {
+    padding: 20px;
+}
+
+.view-content p,
+.view-content p * {
+    user-select: text;
+}
+
+@media (max-width: 400px) {
+    .view-header {
+        padding: 0 7px;
+        height: 50px;
+    }
+    .view-title {
+        font-size: 1.8rem;
+    }
+    .view-content {
+        padding: 15px;
+    }
+}
