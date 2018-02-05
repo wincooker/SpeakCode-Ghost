@@ -1,0 +1,37 @@
+{{!< default}}
+{{! The tag above means - insert everything in this file into the {body} of the default.hbs template }}
+<!-- Preloader Start-->
+<div id="preload">
+    <img src="{{asset "img/preload.gif"}}" alt="preload">
+</div>
+<!-- Preloader End -->
+
+<header id="header" class="page-head clearfix">
+    <div class="container">
+        <div class="title">
+            <div class="row">
+                <div class="col-md-6 col-sm-6 col-xs-6">
+                    <a href="http://www.joelkarr.com"><h2 style="font-weight: 800;">Speak Code</h2>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-6">
+                    <ul class="socials">
+                        <li><a href="https://twitter.com/joel_karr" class="e-eleganticons-207"></a></li>
+                        <li><a href="https://www.linkedin.com/in/joelkarr" class="e-eleganticons-15"></a></li>
+                        <li><a href="/rss" class="e-eleganticons-16"></a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</header>
+
+{{! The main content area on the homepage }}
+<div class="post-template">
+    <main id="content" class="content" style="border: 50px solid transparent;" role="main">
+
+        {{! The tag below includes the post loop - partials/loop.hbs }}
+        {{> "loop"}}
+
+    </main>
+</div>

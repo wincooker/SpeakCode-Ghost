@@ -1,0 +1,11 @@
+{
+    "name": "casper",
+    "description": "The default personal blogging theme for Ghost. Beautiful, minimal and responsive.",
+    "demo": "https://demo.ghost.io",
+    "version": "1.2.9",
+    "author": {
+        "name": "Ghost Foundation",
+        "email": "hello@ghost.org",
+        "url": "https://ghost.org"
+    }
+}

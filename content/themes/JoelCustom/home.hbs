@@ -1,0 +1,253 @@
+{{!< default}}
+{{! The tag above means - insert everything in this file into the {body} of the default.hbs template }}
+<!-- Preloader Start-->
+<div id="preload">
+    <img src="{{asset "img/preload.gif"}}" alt="preload">
+</div>
+<!-- Preloader End -->
+
+<header id="header" class="page-head clearfix">
+    <div class="container">
+        <div class="title">
+            <div class="row">
+                <div class="col-md-6 col-sm-6 col-xs-6">
+                    <a href="http://www.joelkarr.com"><h2 style="font-weight: 800;">Speak Code</h2>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-6">
+                    <ul class="socials">
+                        <li><a href="https://twitter.com/joel_karr" class="e-eleganticons-207"></a></li>
+                        <li><a href="https://www.linkedin.com/in/joelkarr" class="e-eleganticons-15"></a></li>
+                        <li><a href="/rss" class="e-eleganticons-16"></a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</header>
+
+
+<div class="home" id="home">
+    <header class="big-title">
+        <h1 class="big-head"><span><em>Joel Karr</em></span></h1>
+        <!-- Separate with a comma to add more text -->
+        <h4 class="text-sub" id="words-rotate">Passionate Coder, Tech Leader, Speaker, Goat Wranglers</h4>
+    </header>
+<div class="row">
+    <div class="col-xs-4 col-xs-push-4 col-sm-push-5 col-sm-2 col-md-2 col-md-push-5" style="top: 50%; position: absolute;">
+        <img src="/assets/img/goatwranglerwhite.png">
+    </div>
+    </div>
+    <div class="learn-more"><a href="#about" class="e-eleganticons-162">learn more about me</a></div>
+</div>
+
+<div class="about" id="about">
+    <!-- Extra Info -->
+    <div class="extra-info">
+        <div class="container">
+            <ul class="row">
+                <li class="birthdate col-md-3 col-sm-3 col-xs-6">
+                    <span class="head">Connect</span>
+                    <span><a href="https://www.linkedin.com/in/joelkarr">LinkedIn Profile</a></span>
+                </li>
+                <li class="work-type col-md-3 col-sm-3 col-xs-6">
+                    <span class="head">Follow</span>
+                    <span><a href="https://twitter.com/joel_karr">Twitter</a></span>
+                </li>
+                <li class="phone-no col-md-3 col-sm-3 col-xs-6">
+                    <span class="head">Read</span>
+                    <span><a href="/page/1">Blog Posts</a></span>
+                </li>
+                <li class="email col-md-3 col-sm-3 col-xs-6">
+                    <span class="head">Email Address</span>
+                    <span>joelkarr@gmail.com</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- Author Info -->
+    <div class="author-info container">
+        <header class="title">
+            <h2>About Me</h2>
+            <h3><span>/</span>Who Am I</h3>
+        </header>
+        <div class="info row">
+            <figure class="col-md-4 col-sm-5 author-pic"><img src="{{asset "img/profileimage.jpg"}}" alt="author-pic"></figure>
+            <div class="desc col-md-8 col-sm-7">
+                <p>I believe that the world is changing and building great software will be vital. We, as the software community, have an amazing opportunity to take our profession to the next level. I’ve been a member of a Big Ten championship college wrestling team and have a speech communications degree along with a MS in computer science and an MBA (all from the University of Illinois). I try to take all the lessons I have learned along the way and help build software teams that write excellent code, and enjoy doing it!
+                </p>
+            </div>
+        </div>
+    </div>
+</div> <!-- End About Section -->
+{{#with posts.[0]}}
+<div class="blog">
+    <div class="timeline">
+        <div class="timeline container">
+            <header class="title">
+                <h2 style="color: white;">My Blog</h2>
+                <h3 style="color: white;"><span>/</span>Speak Code</h3>
+            </header>
+            <article class="{{post_class}}">
+                <header class="post-header">
+                    <h2 class="post-title" ><a href="{{url}}" style="color: white;">{{{title}}}</a></h2>
+                </header>
+                <section class="post-excerpt">
+                    <p>{{excerpt words="26"}} <a class="read-more" href="{{url}}">&raquo;</a></p>
+                </section>
+                <footer class="post-meta">
+                    {{#if author.profile_image}}<img class="author-thumb" src="{{author.profile_image}}" alt="{{author.name}}" nopin="nopin" />{{/if}}
+                    {{author}}
+                    {{tags prefix=" on "}}
+                    <time class="post-date" datetime="{{date format='YYYY-MM-DD'}}">{{date format="DD MMMM YYYY"}}</time>
+                </footer>
+            </article>
+        </div>
+    </div>
+</div>
+{{/with}}
+<div class="resume" id="resume1">
+    <div class="timeline container">
+        <header class="title">
+            <h2>Upcoming Talks</h2>
+            <h3><span>/</span>Meetups and Conferences</h3>
+        </header>
+
+        <div class="experience timeline-cont clearfix">
+		            <div class="group group-1 clearfix">
+                <span class="date" style="left:30% !important;">September 9 2017</span>
+                <span class="point-circle"></span>
+                <div class="desc-box">
+                    <h4>MKE DOT NET</h4>
+                    <span class="sub-title">Potawatomi Hotel & Casino, Milwaukee, WI</span>
+                    <p><a  class="hyperlink" href="http://www.mkedotnet.com/sessions/dont-think-when-you-code/">Don't Think When You Code</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+<div class="resume" id="resume2">
+    <div class="timeline container">
+        <header class="title">
+            <h2>Past Talks</h2>
+            <h3><span>/</span>Meetups and Conferences</h3>
+        </header>
+
+        <div class="experience timeline-cont clearfix">
+		            <div class="group group-2 group-alter clearfix">
+                <div class="desc-box">
+                    <h4>Chicago Code Camp</h4>
+                    <span class="sub-title">3200 S State Street, Chicago</span>
+                    <p><a  class="hyperlink" href="https://www.chicagocodecamp.com/Sessions/SessionDetail/1225">Don't Think When You Code</a></p>
+                </div>
+				                <span class="point-circle"></span>
+                <span class="date">April 29 2017</span>
+            </div>
+            <div class="group group-1 clearfix">
+			                <span class="date" style="left:30% !important;">May 31 2017</span>
+			                <span class="point-circle"></span>
+                <div class="desc-box">
+                    <h4>Music City Agile</h4>
+                    <span class="sub-title">Vanderbilt University, Nashville</span>
+                    <p><a class="hyperlink" href="https://2017.musiccityagile.org/schedule/dont-think-when-you-code">Don't Think When You Code</a></p>
+                </div>
+            </div>
+            <div class="group group-2 group-alter  clearfix">
+                <span class="date" style="left:31% !important;">June 10 2017</span>
+                <span class="point-circle"></span>
+                <div class="desc-box">
+                    <h4>Beer City Code</h4>
+                    <span class="sub-title">3201 Burton St SE Grand Rapids</span>
+                    <p><a  class="hyperlink" href="http://beercitycode.com/">Don't Think When You Code</a></p>
+                </div>
+				                <span class="point-circle"></span>
+                <span class="date">June 10 2017</span>
+            </div>
+            <div class="group group-1 clearfix">
+                <span class="date" style="left:30% !important;">March 8 2016</span>
+                <span class="point-circle"></span>
+                <div class="desc-box">
+                    <h4>Chicago .NET Developers (Downtown)</h4>
+                    <span class="sub-title">222 W Adams St, Chicago, IL 60606</span>
+                    <p><a  class="hyperlink" href="http://www.meetup.com/chicagodevnet/">Change the way you build software with Azure!</a></p>
+                </div>
+            </div>
+            <div class="group group-2 group-alter clearfix">
+                <div class="desc-box">
+                    <h4>Chicago Code Camp</h4>
+                    <span class="sub-title">3300 South Federal Street, Chicago, Il 60616</span>
+                    <p><a class="hyperlink" href="http://www.chicagocodecamp.com/">Change the way you build software with Azure!</a></p>
+                </div>
+                <span class="point-circle"></span>
+                <span class="date">April 30 2016</span>
+            </div>
+            <div class="group group-1 clearfix">
+                <span class="date" style="left:31% !important;">May 19 2016</span>
+                <span class="point-circle"></span>
+                <div class="desc-box">
+                    <h4>Chicago .NET Users Group</h4>
+                    <span class="sub-title">Downers Grove, IL</span>
+                    <p><a  class="hyperlink" href="http://www.meetup.com/The-Chicago-NET-Users-Group/">Power your Dev Team with Azure!</a></p>
+                </div>
+            </div>
+
+            <div class="group group-2 group-alter clearfix">
+                <div class="desc-box">
+                    <h4>Chicago Coder Conference</h4>
+                    <span class="sub-title">Chicago, IL</span>
+                    <p><a  class="hyperlink" href="https://youtu.be/3ZEcgDfOWpw">Watch talk about Azure in Companies</a></p>
+                  
+                </div>
+                <span class="point-circle"></span>
+                <span class="date">June 6-8 2016</span>
+            </div>
+            <div class="group group-1 clearfix">
+                <span class="date" style="left:26% !important;">October 20, 2016</span>
+                <span class="point-circle"></span>
+                <div class="desc-box">
+                    <h4>Tech in Motion - Chicago</h4>
+                    <span class="sub-title">Chicago, IL</span>
+                    <p><a  class="hyperlink" href="https://vimeo.com/188623978">Watch Panel Discussion on Open Sourcing Microsoft</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> <!-- End Timeline -->
+
+<div class="services" id="services">
+    <div class="testimonials">
+        <div class="container">
+            <h3 class="title">Talk Testimonials</h3>
+            <span class="e-fontawesome-webfont quote-icon">&nbsp;</span>
+            <ul class="testi-list" id="owl-carousel">
+                <li>
+                    <div class="testi testi-1">
+                        <p>It was indeed a great session: informative, well presented, and wonderfully hosted event!</p>
+                        <span class="commentor">Antonela</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="testi testi-2">
+                        <p>What a session! So much informative and to the point.</p>
+                        <span class="commentor">Sudhir</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="testi testi-2">
+                        <p>Thanks for such informative Presentation. It was an educational event.</p>
+                        <span class="commentor">Swetha</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="testi testi-2">
+                        <p>The Presentation was awesome ...it is extremely help full.</p>
+                        <span class="commentor">Leela</span>
+                    </div>
+                </li>
+            </ul>
+            <div class="arrows">
+                <span class="back e-eleganticons-159"></span>
+                <span class="next e-eleganticons-160"></span>
+            </div>
+        </div>
+    </div>
+</div>
